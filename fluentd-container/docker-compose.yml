@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  builder:
+    container_name: builder
+    build:
+      context: ./image
+      dockerfile: fluentd-publisher.dockerfile
+  fluentd-runner:
+    container_name: fluentd-runner
+    image: fluentd-image:latest
+    environment:
+      - LOGGING_DESTINATION_HOST=127.0.0.1
+      - LOGGING_DESTINATION_PORT=24224
+    volumes:
+      - ./td-agent.conf:/etc/td-agent/td-agent.conf
+    network_mode: "host"
+    command: ["sleep", "infinity"]
